@@ -7,6 +7,11 @@ S = TypeVar('S')
 
 
 class StableMap(Generic[T, S]):
+    """
+    Same as the built-in `map` but reacts and handles
+    the occurred exceptions rather than breaking the loop.
+    """
+
     __default: S | Callable[[ErrorContext[T, Exception]], S] | None
     __function: Callable[[T], S]
     __handlers: Sequence[ErrorHandler[T, Exception]]
