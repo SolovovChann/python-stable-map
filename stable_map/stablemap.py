@@ -1,4 +1,4 @@
-from typing import Callable, Generic, Iterable, Sequence, TypeVar
+from typing import Callable, Generator, Generic, Iterable, Sequence, TypeVar
 
 from stable_map.context import ErrorContext, T
 from stable_map.handler import ErrorHandler
@@ -24,6 +24,18 @@ class StableMap(Generic[T, S]):
         self.__function = function
         self.__handlers = handlers
         self.__sequence = sequence
+
+    def __iter__(self) -> Generator[S, None, None]:
+        for index, element in enumerate(self.__sequence):
+            try:
+                yield self.__function(element)
+            except Exception as exc:
+                self.__context = ErrorContext(index, element, exc)
+                self.__handle_exception()
+
+                if self.__default is not None:
+                    yield self.__get_default_value()
+
 
     def __handle_exception(self) -> None:
         for handler in self.__get_specific_exc_handlers():
