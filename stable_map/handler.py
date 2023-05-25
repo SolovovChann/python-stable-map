@@ -5,6 +5,8 @@ from stable_map.context import ErrorContext, ExceptionType, T
 
 
 class ErrorHandler(abc.ABC, Generic[T, ExceptionType]):
+    """Handles the exceptions that occurred inside the `StableMap`"""
+
     __exceptions: Sequence[type[ExceptionType]]
     __ignore: Sequence[type[ExceptionType]]
 
