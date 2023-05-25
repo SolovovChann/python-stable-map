@@ -13,7 +13,7 @@ def __get_default_file_name(context: ErrorContext[Any, Exception]) -> str:
     return f'{exc_type}_{index}'
 
 
-class PickleHandler(ErrorHandler[Any, Exception]):
+class PickleDumpHandler(ErrorHandler[Any, Exception]):
     __context: ErrorContext[Any, Exception]
     __dest: Path
     __file_name: str | Path | Callable[
