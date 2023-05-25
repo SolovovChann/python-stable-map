@@ -24,3 +24,11 @@ class StableMap(Generic[T, S]):
         self.__function = function
         self.__handlers = handlers
         self.__sequence = sequence
+
+    def __get_default_value(self) -> S:
+        assert self.__default is not None
+
+        if callable(self.__default):
+            return self.__default(self.__context)
+
+        return self.__default
