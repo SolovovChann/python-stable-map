@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stable_map"
+requires-python = ">=3.9"
+dynamic = ["version", "readme"]
+license.file = "LICENCE"
+
+[tool.setuptools.dynamic]
+version = {attr = "stable_map.__version__"}
+readme = {file = ["README.md"]}
