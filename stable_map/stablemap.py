@@ -11,6 +11,7 @@ class StableMap(Generic[T, S]):
     __function: Callable[[T], S]
     __handlers: Sequence[ErrorHandler[T, Exception]]
     __sequence: Iterable[T]
+    __context: ErrorContext[T, Exception]
 
     def __init__(
         self,
