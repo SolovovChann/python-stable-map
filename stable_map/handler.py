@@ -15,6 +15,10 @@ class ErrorHandler(abc.ABC, Generic[T, ExceptionType]):
         exceptions: Sequence[type[ExceptionType]],
         ignore: Sequence[type[ExceptionType]],
     ) -> None:
+        """
+        Note: the `exceptions` types is `covariant`
+        and `ignore` types is `invariant`
+        """
         self.__exceptions = exceptions
         self.__ignore = ignore
 
