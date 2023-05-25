@@ -18,6 +18,8 @@ class RaiseExceptionHandler(ErrorHandler[Any, Exception]):
 class LoggingHandler(ErrorHandler[Any, Exception]):
     logger: logging.Logger
 
+    __context: ErrorContext[Any, Exception]
+
     def __init__(
         self,
         exceptions: Sequence[type[Exception]],
