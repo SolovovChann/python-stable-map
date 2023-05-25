@@ -25,6 +25,10 @@ class StableMap(Generic[T, S]):
         self.__handlers = handlers
         self.__sequence = sequence
 
+    def __handle_exception(self) -> None:
+        for handler in self.__get_specific_exc_handlers():
+            handler.handle(self.__context)
+
     def __get_specific_exc_handlers(self) -> list[ErrorHandler[T, Exception]]:
         exception = self.__context.exception
 
