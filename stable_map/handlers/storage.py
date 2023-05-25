@@ -32,3 +32,9 @@ class PickleHandler(ErrorHandler[Any, Exception]):
         super().__init__(exceptions, ignore)
         self.__dest = dest
         self.__file_name = file_name
+
+    def __dump_data(self) -> Any:
+        element = self.__context.element
+        data = pickle.dumps(element)
+
+        return data
