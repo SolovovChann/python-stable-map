@@ -31,3 +31,20 @@ class LoggingHandler(ErrorHandler[Any, Exception]):
 
         super().__init__(exceptions, ignore)
         self.logger = logger
+
+    def handle(self, context: ErrorContext[Any, Exception]) -> None:
+        self.__context = context
+        message = self.__format_log_message()
+        element_repr = self.__repr_element()
+
+        self.logger.debug(element_repr)
+        self.logger.exception(message, exc_info=context.exception)
+
+    def __format_log_message(self) -> str:
+        return (
+            f'Exception occurred at {self.__context.index} '
+            'element of sequence'
+        )
+
+    def __repr_element(self) -> str:
+        return repr(self.__context.element)
