@@ -34,8 +34,7 @@ class StableMap(Generic[T, S]):
                 self.__handle_exception()
 
                 if self.__default is not None:
-                    yield self.__get_default_value()
-
+                    yield self.__eval_default_value()
 
     def __handle_exception(self) -> None:
         for handler in self.__get_specific_exc_handlers():
@@ -50,7 +49,7 @@ class StableMap(Generic[T, S]):
             if handler.is_react_to(exception)
         ]
 
-    def __get_default_value(self) -> S:
+    def __eval_default_value(self) -> S:
         assert self.__default is not None
 
         if callable(self.__default):
