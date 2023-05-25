@@ -33,6 +33,13 @@ class PickleHandler(ErrorHandler[Any, Exception]):
         self.__dest = dest
         self.__file_name = file_name
 
+    def handle(self, context: ErrorContext[Any, Exception]) -> None:
+        self.__context = context
+        output_file = self.__dest / self.__eval_file_name()
+        data = self.__dump_data()
+
+        output_file.write_bytes(data)
+
     def __eval_file_name(self) -> Path:
         if callable(self.__file_name):
             file_name = self.__file_name(self.__context)
