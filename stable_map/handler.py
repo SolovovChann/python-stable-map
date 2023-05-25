@@ -8,6 +8,14 @@ class ErrorHandler(abc.ABC, Generic[T, ExceptionType]):
     __exceptions: Sequence[type[ExceptionType]]
     __ignore: Sequence[type[ExceptionType]]
 
+    def __init__(
+        self,
+        exceptions: Sequence[type[ExceptionType]],
+        ignore: Sequence[type[ExceptionType]],
+    ) -> None:
+        self.__exceptions = exceptions
+        self.__ignore = ignore
+
     @abc.abstractmethod
     def handle(self, context: ErrorContext[T, ExceptionType]) -> None:
         ...
