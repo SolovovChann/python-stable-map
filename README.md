@@ -80,7 +80,7 @@ All BaseException descendants except B
 ErrorHandler([BaseException], [B])
 ```
 
-All BaseException heirs except C, but including C3_1, C3_2
+All BaseException heirs except C, But including C1, С2, C3, C3_1, C3_2
 
 ```python
 ErrorHandler([BaseException], [C])
