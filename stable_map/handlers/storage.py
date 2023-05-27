@@ -6,7 +6,7 @@ from stable_map.context import ErrorContext
 from stable_map.handler import ErrorHandler
 
 
-def __get_default_file_name(context: ErrorContext[Any, Exception]) -> str:
+def _get_default_file_name(context: ErrorContext[Any, Exception]) -> str:
     exc_type = type(context.exception)
     index = context.index
 
@@ -27,7 +27,7 @@ class PickleDumpHandler(ErrorHandler[Any, Exception]):
         dest: Path,
         file_name: str | Path | Callable[
             [ErrorContext[Any, Exception]], str | Path
-        ] = __get_default_file_name,
+        ] = _get_default_file_name,
     ) -> None:
         super().__init__(exceptions, ignore)
         self.__dest = dest
