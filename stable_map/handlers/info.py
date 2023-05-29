@@ -11,9 +11,9 @@ class LoggingHandler(ErrorHandler[Any, Exception]):
 
     def __init__(
         self,
+        logger: logging.Logger | None = None,
         exceptions: Sequence[type[Exception]] = [Exception],
         ignore: Sequence[type[Exception]] = [],
-        logger: logging.Logger | None = None,
     ) -> None:
         if logger is None:
             logger = logging.getLogger(__name__)
