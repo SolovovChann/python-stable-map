@@ -12,8 +12,8 @@ class ErrorHandler(abc.ABC, Generic[T, ExceptionType]):
 
     def __init__(
         self,
-        exceptions: Sequence[type[ExceptionType]],
-        ignore: Sequence[type[ExceptionType]],
+        exceptions: Sequence[type[ExceptionType]] = [Exception],
+        ignore: Sequence[type[ExceptionType]] = [],
     ) -> None:
         """
         Note: the `exceptions` types is `covariant`
