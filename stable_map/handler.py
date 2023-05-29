@@ -12,7 +12,7 @@ class ErrorHandler(abc.ABC, Generic[T, ExceptionType]):
 
     def __init__(
         self,
-        exceptions: Sequence[type[ExceptionType]],
+        exceptions: Sequence[type[ExceptionType]] = [Exception],
         ignore: Sequence[type[ExceptionType]] = [],
     ) -> None:
         """
