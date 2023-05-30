@@ -44,6 +44,3 @@ class LoggingHandler(ErrorHandler[Any, Exception]):
         }
 
         return self.message_format.format(**context)
-
-    def __repr_element(self) -> str:
-        return repr(self.__context.element)
