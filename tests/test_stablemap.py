@@ -38,3 +38,13 @@ class StableMapTest(unittest.TestCase):
 
         for _ in stable_map:
             handler.handle.assert_called_once()
+
+    def test_skip_handler(self) -> None:
+        handler = ErrorHandlerStub([Exception], [ZeroDivisionError])
+        handler.handle = mock.MagicMock()
+
+        sequence = [0, 0, 0]
+        stable_map = StableMap(divide_100_to, sequence, [handler])
+
+        for _ in stable_map:
+            handler.handle.assert_not_called()
