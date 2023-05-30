@@ -7,10 +7,10 @@ from stable_map.handler import ErrorHandler
 
 
 def _get_default_file_name(context: ErrorContext[Any, Exception]) -> str:
-    exc_type = type(context.exception)
+    element_type = type(context.element).__name__.lower()
     index = context.index
 
-    return f'{exc_type}_{index}'
+    return f'{element_type}_{index}.pickle'
 
 
 class PickleDumpHandler(ErrorHandler[Any, Exception]):
