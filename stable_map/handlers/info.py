@@ -1,4 +1,5 @@
 import logging
+from dataclasses import asdict
 from typing import Any, Sequence
 
 from stable_map.context import ErrorContext
@@ -36,10 +37,13 @@ class LoggingHandler(ErrorHandler[Any, Exception]):
         self.__logger.exception(message, exc_info=context.exception)
 
     def __format_log_message(self) -> str:
-        return (
-            f'Exception occurred at {self.__context.index} '
-            'element of sequence'
-        )
+        context_as_dict = asdict(self.__context)
+        context = {
+            key: repr(value)
+            for key, value in context_as_dict.items()
+        }
+
+        return self.message_format.format(**context)
 
     def __repr_element(self) -> str:
         return repr(self.__context.element)
