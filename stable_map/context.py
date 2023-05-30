@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Generic, TypeVar
 
-ExceptionType = TypeVar('ExceptionType', bound=Exception)
+ExceptionType = TypeVar('ExceptionType', bound=Exception, covariant=True)
 T = TypeVar('T')
 
 
