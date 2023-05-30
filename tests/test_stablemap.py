@@ -1,3 +1,4 @@
+import unittest
 from typing import Any
 
 from stable_map.context import ErrorContext
@@ -11,3 +12,7 @@ class ErrorHandlerStub(ErrorHandler[Any, Exception]):
 
 def divide_100_to(divider: float) -> float:
     return 100 // divider
+
+
+class StableMapTest(unittest.TestCase):
+    ...
