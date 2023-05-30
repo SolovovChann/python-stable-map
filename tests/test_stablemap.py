@@ -48,3 +48,12 @@ class StableMapTest(unittest.TestCase):
 
         for _ in stable_map:
             handler.handle.assert_not_called()
+
+    def test_default_value(self) -> None:
+        sequence = [1, 2, 0, 0, 3]
+        reference = [100, 50, 42, 42, 33]
+
+        stable_map = StableMap(divide_100_to, sequence, [], 42)
+
+        for value, ref in zip(stable_map, reference):
+            self.assertEqual(value, ref)
