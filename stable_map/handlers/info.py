@@ -15,9 +15,7 @@ class LoggingHandler(ErrorHandler[Any, Exception]):
     def __init__(
         self,
         logger: logging.Logger | None = None,
-        message_format: str = (
-            '{exception} occurred while processing {index} element'
-        ),
+        message_format: str = '{index} element failed. Value={element}',
         exceptions: Sequence[type[Exception]] = [Exception],
         ignore: Sequence[type[Exception]] = [],
     ) -> None:
