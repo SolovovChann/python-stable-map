@@ -28,3 +28,13 @@ class StableMapTest(unittest.TestCase):
 
         for value, ref in zip(stable_map, reference):
             self.assertEqual(value, ref)
+
+    def test_handler(self) -> None:
+        handler = ErrorHandlerStub([ZeroDivisionError], [])
+        handler.handle = mock.MagicMock()
+
+        sequence = [0, 0, 0]
+        stable_map = StableMap(divide_100_to, sequence, [handler])
+
+        for _ in stable_map:
+            handler.handle.assert_called_once()
