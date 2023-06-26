@@ -6,6 +6,7 @@ but reacting to exceptions that occur
 from .context import ErrorContext
 from .handler import ErrorHandler
 from .stablemap import StableMap
+from .utils import mutate
 
-__all__ = 'StableMap', 'ErrorHandler', 'ErrorContext'
+__all__ = 'StableMap', 'ErrorHandler', 'ErrorContext', 'mutate'
 __version__ = '0.1.0'
