@@ -22,13 +22,16 @@ class PickleDumpHandler(ErrorHandler[Any, Exception]):
 
     def __init__(
         self,
-        dest: Path,
+        dest: Path | str,
         exceptions: Sequence[type[Exception]] = [Exception],
         ignore: Sequence[type[Exception]] = [],
         file_name: str | Path | Callable[
             [ErrorContext[Any, Exception]], str | Path
         ] = _get_default_file_name,
     ) -> None:
+        if isinstance(dest, str):
+            dest = Path(dest)
+
         super().__init__(exceptions, ignore)
         self.__dest = dest
         self.__file_name = file_name
