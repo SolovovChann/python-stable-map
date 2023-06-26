@@ -25,6 +25,8 @@ print(list(stable_map))
 
 When the iterator reaches the fourth value in the sequence (zero), a `ZeroDivisionError` exception will be raised. It does not stop the processing of the remaining elements of the sequence, but will be logged.
 
+If the function returns None or simply mutates the original sequence, use the `stable_map.utils.mutate` utility.
+
 ## Creating Your Own Handlers
 
 If you need to handle an element in a certain way, during the processing of which an exception was thrown, you can create your own handler class. To do this, import the `ErrorHandler` class from the `stable_map.handler` module and extend the `handle` method:
