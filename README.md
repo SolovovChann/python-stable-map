@@ -1,52 +1,93 @@
 # Stable map
 
-A tool similar to the built-in python `map`, but reacting to exceptions that occur.
+This module implements functionality similar to the built-in python class `map` and able to handle exceptions without interrupting the main processing loop.
 
 ## Usage
 
-### General example
+Imagine the situation: there is a set of numbers by which you need to divide the number 100:
 
 ```python
-from pathlib import Path
-
 from stable_map import StableMap
 from stable_map.handlers import LoggingHandler
 
-dest = Path('output')
+
+def divide_100_to(number: int) -> float:
+    return 100 // number
+
 
 sequence = [4, 1, 2, 0, 5, 8]
-stable_map = StableMap(lambda i: 100 // i, sequence, [
-    LoggingHandler([Exception], []),
+stable_map = StableMap(divide_100_to, sequence, [
+    LoggingHandler(),
 ])
 
-for index, integer in enumerate(stable_map, 1):
-    print('%i. %i' % (index, integer))
+print(list(stable_map))
 ```
 
-In this example, when iterator reaches the third element of the sequence and tries to do division by zero, an exception will be logged and processing will not stop.
+When the iterator reaches the fourth value in the sequence (zero), a `ZeroDivisionError` exception will be raised. It does not stop the processing of the remaining elements of the sequence, but will be logged.
 
-### Customizing handlers for specific exceptions
+## Creating Your Own Handlers
 
-Each of the handlers can be flexibly configured for specific exceptions during initialization. The `exceptions` field defines the types of exceptions that the handler will respond to, and the `ignore` field defines the types of exceptions that will be skipped.
-
-> **Note**
-> The `exceptions` types are `covariant` and the `ignore` types are `invariant`.
-
-#### Respond to all exception types
+If you need to handle an element in a certain way, during the processing of which an exception was thrown, you can create your own handler class. To do this, import the `ErrorHandler` class from the `stable_map.handler` module and extend the `handle` method:
 
 ```python
-ErrorHandler([Exception], [])
+from stable_map.context import ErrorContext, ExceptionType, T
+from stable_map.handler import ErrorHandler
+
+
+class MyHandler(ErrorHandler[T, ExceptionType]):
+    def handle(self, context: ErrorContext[T, ExceptionType]) -> None:
+        # do some cool stuff
+        ...
 ```
 
-#### React to all types of exceptions except certain ones
+You can specify the type of sequence elements that the handler can work with. If you try to use a handler with an inappropriate type, a static type analyzer (for example, pylance) will issue a warning:
 
 ```python
-ErrorHandler([Exception], [ZeroDivisionError])
+class MyIntHandler(ErrorHandler[int, ExceptionType]):
+    def handle(self, context: ErrorContext[int, ExceptionType]) -> None:
+        ...
+
+class MyStrHandler(ErrorHandler[str, ExceptionType]):
+    def handle(self, context: ErrorContext[str, ExceptionType]) -> None:
+        ...
+
+
+sequence = [1, 2, 3, 4, 5]
+stable_map = StableMap(divide_100_to, sequence, [
+    LoggingHandler(), # ok
+    MyIntHandler(), # ok
+    MyStrHandler(), # "str" is incompatible with "int"
+])
 ```
 
-In this case, exceptions like `ZeroDivisionError` will be skipped.
+You can also specify the type of exceptions that your handler can handle:
 
-#### Respond to all descendants of a base exception
+```python
+class CustomError(Exception):
+    def __init__(self, name: str, *args: object) -> None:
+        super().__init__(*args)
+        self.name = name
+
+
+class MyIntHandler(ErrorHandler[int, CustomError]):
+    def handle(self, context: ErrorContext[int, CustomError]) -> None:
+        print(context.exception.name)
+
+
+sequence = [1, 2, 3, 4, 5]
+stable_map = StableMap(divide_100_to, sequence, [
+    LoggingHandler(),
+    MyIntHandler(exceptions=[CustomError]),
+])
+```
+
+## Using Handlers for Specific Exceptions
+
+Handlers can be configured to handle specific exceptions. The "exceptions" field of the `ErrorHandler` class defines the types of exceptions that the handler will respond to, and the "ignore" field defines the types of exceptions that will be ignored.
+
+**Important!** The exception types in the `ErrorHandler.exceptions` field are **covariant**, while those in the `ErrorHandler.ignore` field are **invariant**.
+
+### Examples
 
 Let's imagine that the exception scheme looks like this:
 
@@ -55,33 +96,32 @@ BaseException
 ├── A
 ├── B
 ├── C
-│ ├── C1
-│ ├── C2
-│ ├── C3
-│ │ ├── C3_1
-│ │ ├── C3_2
+│   ├── C1
+│   ├── C2
+│   ├── C3
+│   │   ├── C3_1
+│   │   ├── C3_2
 ```
 
-All BaseException heirs
+There are some examples of different exception configurations:
 
 ```python
-ErrorHandler([BaseException], [])
+# all the BaseException class children
+exceptions = [BaseException]
+ignore = []
+
+# all the C class children:
+# C1, C2, C3, C3_1, C3_2
+exceptions = [C]
+ignore = []
+
+# all the BaseException class children except B
+exceptions = [BaseException]
+ignore = [B]
+
+# all the BaseException children except C
+# but including C1, С2, C3, C3_1, C3_2
+exceptions = [BaseException]
+ignore = [C]
 ```
 
-All C heirs: C1, C2, C3, C3_1, C3_2
-
-```python
-ErrorHandler([C], [])
-```
-
-All BaseException descendants except B
-
-```python
-ErrorHandler([BaseException], [B])
-```
-
-All BaseException heirs except C, But including C1, С2, C3, C3_1, C3_2
-
-```python
-ErrorHandler([BaseException], [C])
-```
