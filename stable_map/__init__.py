@@ -9,4 +9,4 @@ from .stablemap import StableMap
 from .utils import mutate
 
 __all__ = 'StableMap', 'ErrorHandler', 'ErrorContext', 'mutate'
-__version__ = '0.1.0'
+__version__ = '1.0.0'
