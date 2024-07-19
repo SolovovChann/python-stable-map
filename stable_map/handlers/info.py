@@ -14,13 +14,13 @@ class LoggingHandler(ErrorHandler[Any, Exception]):
 
     def __init__(
         self,
-        logger: logging.Logger | None = None,
-        message_format: str = '{index} element failed. Value={element}',
+        logger: logging.Logger | str | None = None,
+        message_format: str = "{index} element failed. Value={element}",
         exceptions: Sequence[type[Exception]] = [Exception],
         ignore: Sequence[type[Exception]] = [],
     ) -> None:
-        if logger is None:
-            logger = logging.getLogger(__name__)
+        if not isinstance(logger, logging.Logger):
+            logger = logging.getLogger(logger)
 
         super().__init__(exceptions, ignore)
         self.__logger = logger
