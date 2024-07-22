@@ -5,6 +5,12 @@ is raised in the StableMap class
 
 from .exceptions import RaiseExceptionHandler
 from .info import LoggingHandler
-from .storage import PickleDumpHandler
+from .storage import PickleDumpHandler, Storage
 
-__all__ = 'RaiseExceptionHandler', 'LoggingHandler', 'PickleDumpHandler'
+
+__all__ = (
+    "RaiseExceptionHandler",
+    "Storage",
+    "LoggingHandler",
+    "PickleDumpHandler",
+)
