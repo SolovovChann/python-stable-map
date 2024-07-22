@@ -4,13 +4,14 @@ is raised in the StableMap class
 """
 
 from .exceptions import RaiseExceptionHandler
-from .info import LoggingHandler
+from .info import BufferWriter, LoggingHandler
 from .storage import PickleDumpHandler, Storage
 
 
 __all__ = (
-    "RaiseExceptionHandler",
-    "Storage",
+    "BufferWriter",
     "LoggingHandler",
     "PickleDumpHandler",
+    "RaiseExceptionHandler",
+    "Storage",
 )
