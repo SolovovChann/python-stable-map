@@ -16,8 +16,8 @@ class RaiseExceptionHandlerTest(ErrorHandlerTest):
         )
 
     def test_handle(self) -> None:
-        exception = ZeroDivisionError('expected exception')
-        context = ErrorContext(42, 'expected exception', exception)
+        exception = ZeroDivisionError("expected exception")
+        context = ErrorContext(42, "expected exception", exception)
 
         with self.assertRaises(ZeroDivisionError):
             self.handler.handle(context)

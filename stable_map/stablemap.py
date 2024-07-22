@@ -3,7 +3,8 @@ from typing import Callable, Generator, Generic, Iterable, Sequence, TypeVar
 from stable_map.context import ErrorContext, T
 from stable_map.handler import ErrorHandler
 
-S = TypeVar('S')
+
+S = TypeVar("S")
 
 
 class StableMap(Generic[T, S]):

@@ -10,10 +10,7 @@ def add_100_to(sequence: list[int]) -> None:
 class TestMutate(unittest.TestCase):
     def test_mutate(self) -> None:
         sequence = [[item] for item in range(5)]
-        reference = [
-            [*item, 100]
-            for item in sequence
-        ]
+        reference = [[*item, 100] for item in sequence]
 
         mutate(add_100_to, sequence, [])
 

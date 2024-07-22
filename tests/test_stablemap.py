@@ -63,7 +63,10 @@ class StableMapTest(unittest.TestCase):
         reference = [100, 50, 2, 3, 33]
 
         stable_map = StableMap(
-            divide_100_to, sequence, [], lambda ctx: ctx.index,
+            divide_100_to,
+            sequence,
+            [],
+            lambda ctx: ctx.index,
         )
 
         for value, ref in zip(stable_map, reference):
