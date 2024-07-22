@@ -1,8 +1,9 @@
 import logging
+import sys
 from dataclasses import asdict
-from typing import Any, Sequence
+from typing import IO, Any, Callable, Sequence, TypeAlias
 
-from stable_map.context import ErrorContext
+from stable_map.context import ErrorContext, ExceptionType, T
 from stable_map.handler import ErrorHandler
 
 
@@ -36,3 +37,30 @@ class LoggingHandler(ErrorHandler[Any, Exception]):
         context = {key: repr(value) for key, value in context_as_dict.items()}
 
         return self.message_format.format(**context)
+
+
+ENCODER: TypeAlias = Callable[[ErrorContext[T, ExceptionType]], bytes | str]
+
+
+def _encode_context(context: ErrorContext) -> str | bytes:
+    return str(context.element)
+
+
+class BufferWriter(ErrorHandler[T, ExceptionType]):
+    __buffer: IO
+    __encoding_callback: ENCODER[T, ExceptionType]
+
+    def __init__(
+        self,
+        buffer: IO = sys.stderr,
+        encoding_callback: ENCODER[T, ExceptionType] = _encode_context,
+        exceptions: Sequence[type[ExceptionType]] = [Exception],
+        ignore: Sequence[type[ExceptionType]] = [],
+    ) -> None:
+        super().__init__(exceptions, ignore)
+        self.__buffer = buffer
+        self.__encoding_callback = encoding_callback
+
+    def handle(self, context: ErrorContext[T, ExceptionType]) -> None:
+        assert self.__buffer.writable(), "Buffer is not writable"
+        self.__buffer.write(self.__encoding_callback(context))
