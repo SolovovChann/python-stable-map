@@ -29,16 +29,10 @@ class LoggingHandler(ErrorHandler[Any, Exception]):
     def handle(self, context: ErrorContext[Any, Exception]) -> None:
         self.__context = context
         message = self.__format_log_message()
-        self.__logger.exception(
-            message,
-            exc_info=context.exception
-        )
+        self.__logger.exception(message, exc_info=context.exception)
 
     def __format_log_message(self) -> str:
         context_as_dict = asdict(self.__context)
-        context = {
-            key: repr(value)
-            for key, value in context_as_dict.items()
-        }
+        context = {key: repr(value) for key, value in context_as_dict.items()}
 
         return self.message_format.format(**context)

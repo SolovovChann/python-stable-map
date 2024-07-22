@@ -17,7 +17,7 @@ class LoggingHandlerTest(ErrorHandlerTest):
         )
 
     def test_handle(self) -> None:
-        exception = ZeroDivisionError('expected exception')
+        exception = ZeroDivisionError("expected exception")
         context = ErrorContext(42, 0, exception)
 
         with self.assertLogs(None, logging.ERROR):

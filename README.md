@@ -126,4 +126,3 @@ ignore = [B]
 exceptions = [BaseException]
 ignore = [C]
 ```
-
