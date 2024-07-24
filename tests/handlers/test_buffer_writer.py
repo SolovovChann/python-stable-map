@@ -33,3 +33,10 @@ class BufferWriterTest(ErrorHandlerTest):
 
         with self.assertRaises(AssertionError):
             self.handler.handle(context)
+
+    def test_handle_encoding_callback_exception(self) -> None:
+        self.encoding_callback.side_effect = Exception()
+        context = ErrorContext(0, "test_element", Exception())
+
+        with self.assertRaises(Exception):
+            self.handler.handle(context)
