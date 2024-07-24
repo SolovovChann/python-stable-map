@@ -26,3 +26,10 @@ class BufferWriterTest(ErrorHandlerTest):
         self.encoding_callback.return_value = "encoded_context"
         self.handler.handle(context)
         self.assertEqual(self.buffer.getvalue(), "encoded_context")
+
+    def test_handle_not_writable_buffer(self) -> None:
+        self.buffer.writable = Mock(return_value=False)
+        context = ErrorContext(0, "test_element", Exception())
+
+        with self.assertRaises(AssertionError):
+            self.handler.handle(context)
