@@ -8,6 +8,7 @@ from stable_map.handler import ErrorHandler
 
 
 class LoggingHandler(ErrorHandler[Any, Exception]):
+    level: int
     message_format: str
 
     __logger: logging.Logger
@@ -16,6 +17,7 @@ class LoggingHandler(ErrorHandler[Any, Exception]):
         self,
         logger: logging.Logger | str | None = None,
         message_format: str = "{index} element failed. Value={element}",
+        level: int = logging.ERROR,
         exceptions: Sequence[type[Exception]] = [Exception],
         ignore: Sequence[type[Exception]] = [],
     ) -> None:
@@ -24,11 +26,12 @@ class LoggingHandler(ErrorHandler[Any, Exception]):
 
         super().__init__(exceptions, ignore)
         self.__logger = logger
+        self.level = level
         self.message_format = message_format
 
     def handle(self, context: ErrorContext[Any, Exception]) -> None:
         message = self._format_log_message(context)
-        self.__logger.exception(message, exc_info=context.exception)
+        self.__logger.log(self.level, message, exc_info=context.exception)
 
     def _format_log_message(self, context: ErrorContext[Any, Exception]) -> str:
         context_as_dict = asdict(context)
