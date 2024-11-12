@@ -10,7 +10,6 @@ from stable_map.handler import ErrorHandler
 class LoggingHandler(ErrorHandler[Any, Exception]):
     message_format: str
 
-    __context: ErrorContext[Any, Exception]
     __logger: logging.Logger
 
     def __init__(
@@ -28,12 +27,11 @@ class LoggingHandler(ErrorHandler[Any, Exception]):
         self.message_format = message_format
 
     def handle(self, context: ErrorContext[Any, Exception]) -> None:
-        self.__context = context
-        message = self.__format_log_message()
+        message = self.__format_log_message(context)
         self.__logger.exception(message, exc_info=context.exception)
 
-    def __format_log_message(self) -> str:
-        context_as_dict = asdict(self.__context)
+    def __format_log_message(self, context: ErrorContext[Any, Exception]) -> str:
+        context_as_dict = asdict(context)
         context = {key: repr(value) for key, value in context_as_dict.items()}
 
         return self.message_format.format(**context)
