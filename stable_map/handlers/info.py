@@ -16,6 +16,7 @@ class LoggingHandler(ErrorHandler[Any, Exception]):
 
     def __init__(
         self,
+        *,
         logger: logging.Logger | str | None = None,
         message_format: str = "{index} element failed. Value={element}",
         level: int = logging.ERROR,
