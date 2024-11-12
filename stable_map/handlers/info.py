@@ -32,9 +32,9 @@ class LoggingHandler(ErrorHandler[Any, Exception]):
 
     def _format_log_message(self, context: ErrorContext[Any, Exception]) -> str:
         context_as_dict = asdict(context)
-        context = {key: repr(value) for key, value in context_as_dict.items()}
+        msg_context = {key: repr(value) for key, value in context_as_dict.items()}
 
-        return self.message_format.format(**context)
+        return self.message_format.format(**msg_context)
 
 
 ENCODER: TypeAlias = Callable[[ErrorContext[T, ExceptionType]], bytes | str]
