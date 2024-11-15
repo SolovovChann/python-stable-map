@@ -65,12 +65,12 @@ def _encode_context(context: ErrorContext[Any, Exception]) -> str | bytes:
 
 
 class BufferWriter(ErrorHandler[T, ExceptionType]):
-    __buffer: IO
+    __buffer: IO[str] | IO[bytes]
     __encoding_callback: ENCODER[T, ExceptionType]
 
     def __init__(
         self,
-        buffer: IO = sys.stderr,
+        buffer: IO[str] | IO[bytes] = sys.stderr,
         encoding_callback: ENCODER[T, ExceptionType] = _encode_context,
         exceptions: Sequence[type[ExceptionType]] = [Exception],
         ignore: Sequence[type[ExceptionType]] = [],
