@@ -1,6 +1,5 @@
 import logging
 import sys
-from dataclasses import asdict
 from typing import IO, Any, Callable, Sequence, TypeAlias
 
 from stable_map.context import ErrorContext, ExceptionType, T
@@ -43,18 +42,25 @@ class LoggingHandler(ErrorHandler[Any, Exception]):
         self,
         context: ErrorContext[Any, Exception],
     ) -> str:
-        context_as_dict = asdict(context)
-        msg_context = {
-            key: repr(value) for key, value in context_as_dict.items()
-        }
+        message_context = self._make_message_context(context)
+        return self.message_format.format(**message_context)
 
-        return self.message_format.format(**msg_context)
+    def _make_message_context(
+        self,
+        context: ErrorContext[Any, Exception],
+    ) -> dict[str, Any]:
+        return {
+            "index": context.index,
+            "element": context.element,
+            "exception": context.exception,
+            "exception_type": context.exception.__class__,
+        }
 
 
 ENCODER: TypeAlias = Callable[[ErrorContext[T, ExceptionType]], bytes | str]
 
 
-def _encode_context(context: ErrorContext) -> str | bytes:
+def _encode_context(context: ErrorContext[Any, Exception]) -> str | bytes:
     return str(context.element)
 
 
